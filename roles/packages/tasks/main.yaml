@@ -49,8 +49,8 @@
     copy:
       src: files/daemon.json
       dest: /etc/docker/daemon.json
-      owner: ubuntu
-      group: ubuntu
+      owner: root
+      group: root
       mode: 0644
   - name: Make sure a docker service is restarted
     systemd: state=restarted name=docker enabled=True
