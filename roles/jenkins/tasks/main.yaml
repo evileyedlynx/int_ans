@@ -1,0 +1,48 @@
+---
+  - name: Add jenkins key to apt
+    apt_key:
+      url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+      state: present
+  - name: Add jenkins repo
+    apt_repository:
+      repo: deb https://pkg.jenkins.io/debian-stable binary/
+      state: present
+      filename: jenkins
+      update_cache: yes
+  - name: ensure jenkins is installed
+    apt:
+      name: jenkins
+      state: present
+  - name: ensure jenkins is started
+    systemd:
+      name: jenkins
+      enabled: yes
+      state: started
+  - name: Create .ssh directory for user jenkins
+    file:
+      path: /var/lib/jenkins/.ssh
+      owner: jenkins
+      group: jenkins
+      mode: 0700
+      state: directory
+  - name: Copy private key
+    copy:
+      src: files/.ssh/id_rsa
+      dest: /var/lib/jenkins/.ssh/id_rsa
+      owner: jenkins
+      group: jenkins
+      mode: 0600
+  - name: Copy public key
+    copy:
+      src: files/.ssh/id_rsa.pub
+      dest: /var/lib/jenkins/.ssh/id_rsa.pub
+      owner: jenkins
+      group: jenkins
+      mode: 0644
+  - name: Disable StrictHostKeyChecking
+    copy:
+      src: files/.ssh/config
+      dest: /var/lib/jenkins/.ssh/config
+      owner: jenkins
+      group: jenkins
+      mode: 0600

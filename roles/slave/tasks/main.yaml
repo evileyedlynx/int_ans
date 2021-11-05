@@ -1,0 +1,11 @@
+---
+  - name: Add jenkins user
+    user:
+      name: jenkins
+      home: /var/lib/jenkins
+      shell: /bin/bash
+  - name: Set up autorized_keys
+    authorized_key:
+      user: jenkins
+      state: present
+      key: "{{ lookup('file', 'files/.ssh/id_rsa.pub') }}"

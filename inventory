@@ -1,0 +1,16 @@
+[every]
+jmain ansible_host=
+nexus ansible_host=
+slave ansible_host=
+
+[every:vars]
+ansible_user=zloben
+
+[jenkmain]
+jmain ansible_host= ansible_user=zloben
+
+[nexus]
+nexus ansible_host= ansible_user=zloben
+
+[slv]
+slave ansible_host= ansible_user=zloben

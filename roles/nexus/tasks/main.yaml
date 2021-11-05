@@ -1,0 +1,61 @@
+---
+  - name: Get nexus tarball
+    get_url:
+      url: 'http://download.sonatype.com/nexus/3/nexus-{{ nexus_version }}-unix.tar.gz' 
+      dest: '/opt/nexus-{{ nexus_version }}-unix.tar.gz'
+
+  - name: Unpack nexus tarball
+    unarchive:
+      src: '/opt/nexus-{{ nexus_version }}-unix.tar.gz'
+      dest: /opt
+      remote_src: yes
+
+  - name: rename unpacked dir to /opt/nexus
+    command: 'mv /opt/nexus-{{ nexus_version }} /opt/nexus'
+    ignore_errors: yes
+
+  - name: Add nexus user
+    user:
+      name: nexus
+      shell: /bin/bash
+
+  - name: Give nexus user ownership to /opt/nexus
+    file:
+      path: /opt/nexus
+      owner: nexus
+      group: nexus
+      recurse: yes
+
+  - name: Give nexus user ownership to /opt/sonatype-work
+    file:
+      path: /opt/sonatype-work
+      owner: nexus
+      group: nexus
+      recurse: yes
+
+  - name: Change user to launch nexus
+    lineinfile:
+      path: /opt/nexus/bin/nexus.rc
+      line: run_as_user="nexus"
+
+  - name: Copy correct nexus config
+    copy:
+      src: files/nexus.vmoptions
+      dest: /opt/nexus/bin/nexus.vmoptions
+      owner: nexus
+      group: nexus
+      mode: 0644
+
+  - name: Copy systemd service nexus
+    copy:
+      src: files/nexus.service
+      dest: /etc/systemd/system/nexus.service
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: just force systemd to reread configs (2.4 and above)
+    systemd: daemon_reload=yes
+
+  - name: Make sure a service is running
+    systemd: state=restarted name=nexus enabled=True

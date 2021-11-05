@@ -1,0 +1,57 @@
+---
+  - name: ensure apt-transport-https is installed
+    apt:
+      name: apt-transport-https
+      state: present
+      update_cache: yes
+  - name: ensure jdk is installed
+    apt:
+      name: openjdk-8-jdk 
+      state: present
+  - name: ensure maven is installed
+    apt:
+      name: maven
+      state: present
+  - name: ensure needed packages for docker are installed
+    apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
+  - name: Add apt key for docker repo
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+  - name: Add docker repo
+    apt_repository:
+      repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable' 
+      state: present
+      filename: docker
+  - name: ensure docker is installed
+    apt:
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    loop:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+  - name: Added jenkins user to docker group
+    user:
+      name: jenkins
+      groups: docker
+      append: yes
+    when: '"jmain" in ansible_hostname|string'
+  - name: Copy daemon.json for insecure registry
+    copy:
+      src: files/daemon.json
+      dest: /etc/docker/daemon.json
+      owner: root
+      group: root
+      mode: 0644
+  - name: Make sure a docker service is restarted
+    systemd: state=restarted name=docker enabled=True
+    when: '"jmain" in ansible_hostname|string'
