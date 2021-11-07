@@ -1,7 +1,0 @@
-{
-  "insecure-registries": [
-    "nexus:8123",
-    "nexus:8124"
-  ]
-}
-

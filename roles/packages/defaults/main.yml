@@ -1,0 +1,6 @@
+---
+packages_prerequisites:
+  - 'ca-certificates'
+  - 'gnupg-agent'
+#  - 'openjdk-8-jdk'
+#  - 'maven'
