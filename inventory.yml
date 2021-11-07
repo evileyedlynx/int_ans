@@ -1,0 +1,22 @@
+servers:
+  hosts:
+    jmain:
+      ansible_host: 3.144.41.16
+    nexus:
+      ansible_host: 3.15.225.246
+    slave:
+      ansible_host: 3.135.191.35
+  vars:
+    ansible_user: 'ubuntu'
+
+
+jenkinssrv:
+  hosts:
+    jmain:
+nexussrv:
+  hosts:
+    nexus:
+slavesrv:
+  hosts:
+    slave:
+
