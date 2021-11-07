@@ -1,0 +1,9 @@
+---
+# Docker packages list
+packages_docker:
+  - 'docker-ce'
+  - 'docker-ce-cli'
+  - 'containerd.io'
+
+# Insecure registry addresses
+docker_insecure_registry_addresses: []
