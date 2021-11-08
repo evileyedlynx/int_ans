@@ -26,7 +26,7 @@
     group: root
     mode: 0755
 
-- name: Copy daemon.json for insecure registry
+- name: copy daemon.json for insecure registry
   template:
     src: daemon.json.j2
     dest: /etc/docker/daemon.json
@@ -35,3 +35,11 @@
     mode: 0644
   notify:
     - restart docker
+
+- name: add ansible_user to docker group
+  become: yes
+  user:
+    name: '{{ ansible_user }}'
+    groups:
+      - 'docker'
+    append: yes

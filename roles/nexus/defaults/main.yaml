@@ -1,1 +1,7 @@
-nexus_version: 3.36.0-01
+---
+nexus_version: 3.36.0
+nexus_image: 'sonatype/nexus3'
+
+nexus_access_ip: '127.0.0.1'
+
+nexus_memory_in_mb: '2703'

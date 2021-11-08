@@ -1,11 +1,11 @@
 ---
-  - name: ensure apt-transport-https is installed
-    apt:
-      name: apt-transport-https
-      state: present
-      update_cache: yes
+- name: ensure apt-transport-https is installed
+  apt:
+    name: apt-transport-https
+    state: present
+    update_cache: yes
 
-  - name: ensure prerequisite packages are installed
-    apt:
-      name: "{{ packages_prerequisites }}"
-      state: present
+- name: ensure prerequisite packages are installed
+  apt:
+    name: "{{ packages_prerequisites }}"
+    state: present
