@@ -8,7 +8,7 @@
     authorized_key:
       user: jenkins
       state: present
-      key: "{{ lookup('file', 'files/.ssh/id_rsa.pub') }}"
+      key: "{{ lookup('file', 'files/id_rsa.pub') }}"
   - name: ensure Java is present
     apt:
       name: openjdk-8-jdk 
