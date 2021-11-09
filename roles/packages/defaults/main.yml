@@ -3,5 +3,5 @@ packages_prerequisites:
   - 'ca-certificates'
   - 'gnupg-agent'
   - 'python3-docker'
-#  - 'openjdk-8-jdk'
+  - 'openjdk-8-jdk'
 #  - 'maven'
