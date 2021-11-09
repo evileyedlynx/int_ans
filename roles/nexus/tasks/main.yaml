@@ -41,6 +41,8 @@
     image: '{{ nexus_image }}:{{ nexus_version }}'
     published_ports:
       - '{{ nexus_access_ip }}:8081:8081'
+      - '{{ nexus_access_ip }}:8123:8123'
+      - '{{ nexus_access_ip }}:8124:8124'
     restart_policy: 'unless-stopped'
     stop_timeout: 120
     state: started
