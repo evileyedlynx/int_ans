@@ -9,3 +9,11 @@
       user: jenkins
       state: present
       key: "{{ lookup('file', 'files/.ssh/id_rsa.pub') }}"
+  - name: ensure Java is present
+    apt:
+      name: openjdk-8-jdk 
+      state: present
+  - name: ensure Maven is present
+    apt: 
+      name: Maven
+      state: present

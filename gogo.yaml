@@ -5,18 +5,18 @@
     - role: packages
     - role: docker
 
-#- hosts: nexussrv
-#  become: yes
-#  roles:
-#    - role: nexus
+- hosts: nexussrv
+  become: yes
+  roles:
+    - role: nexus
 
 - hosts: jenkinssrv
   become: yes
   roles:
     - role: jenkins
 
-#- hosts: slavesrv
-#  become: yes
-#  roles:
-#    - role: docker
-#    - role: slave
+- hosts: slavesrv
+  become: yes
+  roles:
+    - role: docker
+    - role: slave

@@ -28,4 +28,7 @@ nexussrv:
 slavesrv:
   hosts:
     slave:
+      ansible_user: 'ubuntu'
+      ansible_host: 3.135.191.35
+      local_ip: '172.31.10.253'
 
