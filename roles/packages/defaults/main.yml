@@ -4,4 +4,4 @@ packages_prerequisites:
   - 'gnupg-agent'
   - 'python3-docker'
   - 'openjdk-8-jdk'
-#  - 'maven'
+  - 'maven'
