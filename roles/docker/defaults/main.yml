@@ -6,4 +6,6 @@ packages_docker:
   - 'containerd.io'
 
 # Insecure registry addresses
-docker_insecure_registry_addresses: []
+docker_insecure_registry_addresses:
+  - '31.41.156.90:8123'
+  - '31.41.156.90:8124'
