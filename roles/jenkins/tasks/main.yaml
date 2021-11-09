@@ -1,10 +1,10 @@
 ---
-- name: ensure jenkins docker image
-  docker_image:
-    name: '{{ jenkins_image }}:{{ jenkins_version }}'
-    source: pull
+#- name: ensure jenkins docker image
+#  docker_image:
+#    name: '{{ jenkins_image }}:{{ jenkins_version }}'
+#    source: pull
 #    force_source: yes
-    state: present
+#    state: present
 
 #- name: ensure jenkins group
 #  become: yes
@@ -22,76 +22,76 @@
 #    group: jenkins
 #    state: present
 
-- name: ensure dir for jenkins data
-  become: yes
-  file:
-    path: '/data/jenkins'
-    state: directory
-    owner: 1000
-    group: 1000
-    mode: 0755
+#- name: ensure dir for jenkins data
+#  become: yes
+#  file:
+#    path: '/data/jenkins'
+#    state: directory
+#    owner: 1000
+#    group: 1000
+#    mode: 0755
 
-- name: ensure docker container started
-  docker_container:
-    container_default_behavior: 'compatibility'
-    detach: yes
+#- name: ensure docker container started
+#  docker_container:
+#    container_default_behavior: 'compatibility'
+#    detach: yes
+#    name: jenkins
+#    image: '{{ jenkins_image }}:{{ jenkins_version }}'
+#    published_ports:
+#      - '{{ jenkins_access_ip }}:8080:8080'
+#      - '{{ jenkins_access_ip }}:50000:50000'
+#    restart_policy: 'unless-stopped'
+#    stop_timeout: 120
+#    state: started
+#    volumes:
+#      - '/data/jenkins:/var/jenkins_home'
+#    ulimits:
+#      - 'nofile:65536:65536'
+
+- name: Add jenkins key to apt
+  apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+    state: present
+- name: Add jenkins repo
+  apt_repository:
+    repo: deb https://pkg.jenkins.io/debian-stable binary/
+    state: present
+    filename: jenkins
+    update_cache: yes
+- name: ensure jenkins is installed
+  apt:
     name: jenkins
-    image: '{{ jenkins_image }}:{{ jenkins_version }}'
-    published_ports:
-      - '{{ jenkins_access_ip }}:8080:8080'
-      - '{{ jenkins_access_ip }}:50000:50000'
-    restart_policy: 'unless-stopped'
-    stop_timeout: 120
+    state: present
+- name: ensure jenkins is started
+  systemd:
+    name: jenkins
+    enabled: yes
     state: started
-    volumes:
-      - '/data/jenkins:/var/jenkins_home'
-    ulimits:
-      - 'nofile:65536:65536'
-
-#  - name: Add jenkins key to apt
-#    apt_key:
-#      url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
-#      state: present
-#  - name: Add jenkins repo
-#    apt_repository:
-#      repo: deb https://pkg.jenkins.io/debian-stable binary/
-#      state: present
-#      filename: jenkins
-#      update_cache: yes
-#  - name: ensure jenkins is installed
-#    apt:
-#      name: jenkins
-#      state: present
-#  - name: ensure jenkins is started
-#    systemd:
-#      name: jenkins
-#      enabled: yes
-#      state: started
-#  - name: Create .ssh directory for user jenkins
-#    file:
-#      path: /var/lib/jenkins/.ssh
-#      owner: jenkins
-#      group: jenkins
-#      mode: 0700
-#      state: directory
-#  - name: Copy private key
-#    copy:
-#      src: files/.ssh/id_rsa
-#      dest: /var/lib/jenkins/.ssh/id_rsa
-#      owner: jenkins
-#      group: jenkins
-#      mode: 0600
-#  - name: Copy public key
-#    copy:
-#      src: files/.ssh/id_rsa.pub
-#      dest: /var/lib/jenkins/.ssh/id_rsa.pub
-#      owner: jenkins
-#      group: jenkins
-#      mode: 0644
-#  - name: Disable StrictHostKeyChecking
-#    copy:
-#      src: files/.ssh/config
-#      dest: /var/lib/jenkins/.ssh/config
-#      owner: jenkins
-#      group: jenkins
-#      mode: 0600
+- name: Create .ssh directory for user jenkins
+  file:
+    path: /var/lib/jenkins/.ssh
+    owner: jenkins
+    group: jenkins
+    mode: 0700
+    state: directory
+- name: Copy private key
+  copy:
+    src: files/id_rsa
+    dest: /var/lib/jenkins/.ssh/id_rsa
+    owner: jenkins
+    group: jenkins
+    mode: 0600
+- name: Copy public key
+  copy:
+    src: files/id_rsa.pub
+    dest: /var/lib/jenkins/.ssh/id_rsa.pub
+    owner: jenkins
+    group: jenkins
+    mode: 0644
+- name: Disable StrictHostKeyChecking
+  copy:
+    src: files/config
+    dest: /var/lib/jenkins/.ssh/config
+    owner: jenkins
+    group: jenkins
+    mode: 0600
