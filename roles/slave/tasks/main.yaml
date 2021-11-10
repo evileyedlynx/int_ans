@@ -9,8 +9,10 @@
       user: jenkins
       state: present
       key: "{{ lookup('file', 'files/id_rsa.pub') }}"
-  - name: ensure Maven is present
+  - name: ensure pass and gnupg is present, needed for slave
     apt: 
-      name: maven
+      pkg:
+        - pass
+        - gnupg2
       state: present
       update_cache: yes
